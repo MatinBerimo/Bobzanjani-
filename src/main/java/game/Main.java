@@ -2,22 +2,22 @@ package game;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) {
-        StackPane root = new StackPane();
-        City city = new City();
-        root.getChildren().add(city.getMapCanvas());
+        // ایجاد نقشه با ابعاد 10x10
+        Map map = new Map(10, 10);
 
-        Scene scene = new Scene(root, 1600, 1200);
-        primaryStage.setTitle("Fantasy City Builder");
+        // ایجاد GridPane برای نمایش نقشه
+        GridPane gridPane = new GridPane();
+        map.displayMap(gridPane);
 
-        primaryStage.setFullScreen(true);  // Game runs in fullscreen mode
-        primaryStage.setFullScreenExitHint(""); // Disable fullscreen exit hint
+        // تنظیم صحنه و نمایش آن
+        Scene scene = new Scene(gridPane, 400, 400);
+        primaryStage.setTitle("Citybuilding Simulator");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
