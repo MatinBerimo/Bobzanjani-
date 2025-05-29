@@ -1,3 +1,4 @@
-game\Main.class
 game\Map.class
 game\Tile.class
+game\Building.class
+game\Main.class
