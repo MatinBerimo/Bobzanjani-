@@ -9,7 +9,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         // ایجاد نقشه با ابعاد 10x10
-        Map map = new Map(10, 10);
+        Map map = new Map(100, 100);
 
         // ایجاد GridPane برای نمایش نقشه
         GridPane gridPane = new GridPane();
