@@ -1,32 +1,22 @@
 package game;
 
 public class Building {
-    private String name; // Name of the building (e.g., House, Road)
-    private int cost; // Cost of building
-    private String type; // Type of building (e.g., Residential, Commercial)
-    private boolean canBuildOnGrass; // Can this building be built on grass?
-
-    public Building(String name, int cost, String type, boolean canBuildOnGrass) {
-        this.name = name;
-        this.cost = cost;
-        this.type = type;
-        this.canBuildOnGrass = canBuildOnGrass;
+    private BuildingType buildingType;
+    private int customCost; // This could be modified during gameplay
+    
+    // Constructor
+    public Building(BuildingType buildingType) {
+        this.buildingType = buildingType;
+        this.customCost = buildingType.getBuildCost(); // Initial cost from type
     }
 
-    // Getters and setters
-    public String getName() {
-        return name;
-    }
-
+    // Setters and getters
     public int getCost() {
-        return cost;
+        return customCost; // Get the cost of the specific building instance
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public boolean canBuildOnGrass() {
-        return canBuildOnGrass;
+    // Example of cost modification (e.g., after upgrades)
+    public void upgradeBuilding(int upgradeCost) {
+        this.customCost += upgradeCost; // The cost could change based on upgrades
     }
 }

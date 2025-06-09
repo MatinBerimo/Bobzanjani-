@@ -1,0 +1,27 @@
+.context-menu {
+    background-color: #222;
+    -fx-background-color: #222;
+    border-color: #444;
+    -fx-border-color: #444;
+    border-width: 2px;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, #000, 8, 0.5, 0, 2);
+}
+
+.menu-item {
+    background-color: transparent;
+    -fx-background-color: transparent;
+    color: #fff;
+    -fx-text-fill: #fff;
+    font-size: 16px;
+    -fx-font-size: 16px;
+    padding: 8px 20px 8px 20px;
+    -fx-padding: 8 20 8 20;
+}
+
+.menu-item:focused, .menu-item:hover {
+    background-color: #444;
+    -fx-background-color: #444;
+    color: #ffd700;
+    -fx-text-fill: #ffd700;
+}

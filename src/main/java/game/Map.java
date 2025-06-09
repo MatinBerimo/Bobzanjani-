@@ -1,25 +1,28 @@
 package game;
 
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import java.util.EnumMap;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 
 public class Map {
     private Tile[][] tiles;
     private int width, height;
     private Rectangle previousRectangle;
-    private int previousX = -1, previousY = -1;
-    private Building selectedBuilding; // Reference to the selected building
+    private BuildingType selectedBuildingType; // Reference to the selected building type (instead of Building)
+    private ResourceManager resources; // Reference to the resources class
 
-    public Map(int width, int height) {
+    public Map(int width, int height, ResourceManager resources) {
         this.width = width;
         this.height = height;
         this.tiles = new Tile[width][height];
+        this.resources = resources; // Initialize the resources
         generateMap();
     }
 
@@ -39,7 +42,6 @@ public class Map {
         gridPane.getChildren().clear();
         Image tileImage = new Image("file:D:/Programming/Repos/Bobzanjani/src/main/resources/images/grasss.png");
 
-        // Loop over each tile to add to the grid
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 ImageView imageView = new ImageView(tileImage);
@@ -49,9 +51,52 @@ public class Map {
                 final int finalX = x;
                 final int finalY = y;
 
-                // Set context menu on right-click
-                imageView.setOnContextMenuRequested(event -> {
-                    showBuildingMenu(finalX, finalY, gridPane);
+                // Set on-click event to place building using the selectedBuildingType
+                imageView.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.SECONDARY) { // Right-click
+                        ContextMenu contextMenu = new ContextMenu();
+                        Tile tile = tiles[finalX][finalY];
+                        if (tile.getBuilding() == null && tile.isBuildable()) {
+                            MenuItem buildMenu = new MenuItem("Build");
+                            ContextMenu buildSubMenu = new ContextMenu();
+                            for (BuildingType type : BuildingType.values()) {
+                                MenuItem typeItem = new MenuItem(type.name().charAt(0) + type.name().substring(1).toLowerCase());
+                                typeItem.setOnAction(e -> {
+                                    placeBuilding(gridPane, finalX, finalY, type);
+                                });
+                                buildSubMenu.getItems().add(typeItem);
+                            }
+                            buildMenu.setOnAction(e -> buildSubMenu.show(imageView, event.getScreenX(), event.getScreenY()));
+                            contextMenu.getItems().add(buildMenu);
+                        }
+                        if (tile.getBuilding() != null) {
+                            MenuItem upgradeItem = new MenuItem("Upgrade");
+                            upgradeItem.setOnAction(e -> {
+                                upgradeBuilding(gridPane, finalX, finalY);
+                            });
+                            contextMenu.getItems().add(upgradeItem);
+                        }
+                        MenuItem infoItem = new MenuItem("Show Info");
+                        infoItem.setOnAction(e -> {
+                            showTileInfo(finalX, finalY);
+                        });
+                        contextMenu.getItems().add(infoItem);
+                        if (tile.getBuilding() != null) {
+                            MenuItem demolishItem = new MenuItem("Demolish");
+                            demolishItem.setOnAction(e -> {
+                                removeBuilding(gridPane, finalX, finalY);
+                            });
+                            contextMenu.getItems().add(demolishItem);
+                        }
+                        MenuItem cancelItem = new MenuItem("Cancel");
+                        cancelItem.setOnAction(e -> contextMenu.hide());
+                        contextMenu.getItems().add(cancelItem);
+                        contextMenu.show(imageView, event.getScreenX(), event.getScreenY());
+                    } else if (event.getButton() == MouseButton.PRIMARY) { // Left-click
+                        if (selectedBuildingType != null) {
+                            placeBuilding(gridPane, finalX, finalY, selectedBuildingType);
+                        }
+                    }
                 });
 
                 // Add the image view to the grid
@@ -69,62 +114,62 @@ public class Map {
         gridPane.add(previousRectangle, x, y);
     }
 
-    public void showBuildingMenu(int x, int y, GridPane gridPane) {
-        // Create a ContextMenu to display building options
-        ContextMenu buildingMenu = new ContextMenu();
-
-        // Create MenuItems for different building types with icons
-        MenuItem houseItem = new MenuItem("Place House");
-        houseItem.setGraphic(createIcon("file:D:/Programming/Repos/Bobzanjani/src/main/resources/images/house.png"));
-        houseItem.setOnAction(e -> {
-            selectedBuilding = new Building("House", 100, "Residential", true);
-            placeBuilding(gridPane, x, y);
-        });
-
-        MenuItem roadItem = new MenuItem("Place Road");
-        roadItem.setGraphic(createIcon("file:D:/Programming/Repos/Bobzanjani/src/main/resources/images/road.png"));
-        roadItem.setOnAction(e -> {
-            selectedBuilding = new Building("Road", 50, "Infrastructure", true);
-            placeBuilding(gridPane, x, y);
-        });
-
-        MenuItem parkItem = new MenuItem("Place Park");
-        parkItem.setGraphic(createIcon("file:D:/Programming/Repos/Bobzanjani/src/main/resources/images/park.png"));
-        parkItem.setOnAction(e -> {
-            selectedBuilding = new Building("Park", 30, "Recreational", true);
-            placeBuilding(gridPane, x, y);
-        });
-
-        // Add the MenuItems to the ContextMenu
-        buildingMenu.getItems().addAll(houseItem, roadItem, parkItem);
-
-        // Show the ContextMenu at the position of the tile
-        buildingMenu.show(gridPane, x * 40, y * 40); // Position the menu at the clicked tile
-    }
-    private ImageView createIcon(String imagePath) {
-        Image image = new Image(imagePath);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(20);  // Set the size of the icon
-        imageView.setFitHeight(20); // Set the size of the icon
-        return imageView;
-    }
-
-    public void placeBuilding(GridPane gridPane, int x, int y) {
+    public void placeBuilding(GridPane gridPane, int x, int y, BuildingType type) {
         Tile tile = tiles[x][y];
-
-        // Check if the tile is buildable and doesn't already have a building
         if (tile.isBuildable() && tile.getBuilding() == null) {
-            tile.placeBuilding(selectedBuilding); // Place the selected building on the tile
-
-            // Update the tile's image to reflect the building placement
-            Image buildingImage = new Image("file:D:/Programming/Repos/Bobzanjani/src/main/resources/images/" + selectedBuilding.getName().toLowerCase() + ".png");
-            for (Node node : gridPane.getChildren()) {
-                if (GridPane.getRowIndex(node) == y && GridPane.getColumnIndex(node) == x) {
-                    ((ImageView) node).setImage(buildingImage); // Update image to reflect the house
+            if (resources.canAfford(type.getBuildCost(), type.getEnergyConsumption())) {
+                resources.spendResources(type.getBuildCost(), type.getEnergyConsumption());
+                tile.placeBuilding(new Building(type));
+                Image buildingImage = new Image(getClass().getResourceAsStream("/images/" + type.name().toLowerCase() + ".png"));
+                for (Node node : gridPane.getChildren()) {
+                    if (GridPane.getRowIndex(node) == y && GridPane.getColumnIndex(node) == x) {
+                        ((ImageView) node).setImage(buildingImage);
+                    }
                 }
+            } else {
+                System.out.println("Not enough resources to build this building.");
             }
         } else {
             System.out.println("Cannot build here! Tile is not buildable or already has a building.");
+        }
+    }
+
+    public void removeBuilding(GridPane gridPane, int x, int y) {
+        Tile tile = tiles[x][y];
+        if (tile.getBuilding() != null) {
+            // Add resources back or whatever is appropriate for demolishing
+            // For now, just remove the building and revert image to grass
+            tile.placeBuilding(null); // Remove the building
+            Image grassImage = new Image(getClass().getResourceAsStream("/images/grasss.png"));
+            for (Node node : gridPane.getChildren()) {
+                if (GridPane.getRowIndex(node) == y && GridPane.getColumnIndex(node) == x) {
+                    ((ImageView) node).setImage(grassImage);
+                }
+            }
+            System.out.println("Building at " + x + ", " + y + " demolished.");
+        } else {
+            System.out.println("No building to demolish at " + x + ", " + y + ".");
+        }
+    }
+
+    // Stub for upgrade
+    public void upgradeBuilding(GridPane gridPane, int x, int y) {
+        Tile tile = tiles[x][y];
+        if (tile.getBuilding() != null) {
+            tile.getBuilding().upgradeBuilding(100); // Example: add 100 to cost
+            System.out.println("Building at " + x + ", " + y + " upgraded.");
+        } else {
+            System.out.println("No building to upgrade at " + x + ", " + y + ".");
+        }
+    }
+
+    // Stub for info
+    public void showTileInfo(int x, int y) {
+        Tile tile = tiles[x][y];
+        if (tile.getBuilding() != null) {
+            System.out.println("Tile (" + x + ", " + y + ") has building: " + tile.getBuilding().getClass().getSimpleName());
+        } else {
+            System.out.println("Tile (" + x + ", " + y + ") is empty.");
         }
     }
 }
