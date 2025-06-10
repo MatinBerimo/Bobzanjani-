@@ -117,8 +117,8 @@ public class Map {
     public void placeBuilding(GridPane gridPane, int x, int y, BuildingType type) {
         Tile tile = tiles[x][y];
         if (tile.isBuildable() && tile.getBuilding() == null) {
-            if (resources.canAfford(type.getBuildCost(), type.getEnergyConsumption())) {
-                resources.spendResources(type.getBuildCost(), type.getEnergyConsumption());
+            if (resources.canAfford(type.getBuildCost(), type.getMaterialsCost(), type.getEnergyConsumption())) {
+                resources.spendResources(type.getBuildCost(), type.getMaterialsCost(), type.getEnergyConsumption());
                 tile.placeBuilding(new Building(type));
                 Image buildingImage = new Image(getClass().getResourceAsStream("/images/" + type.name().toLowerCase() + ".png"));
                 for (Node node : gridPane.getChildren()) {
