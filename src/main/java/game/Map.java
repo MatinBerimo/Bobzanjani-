@@ -40,7 +40,7 @@ public class Map {
 
     public void displayMap(GridPane gridPane) {
         gridPane.getChildren().clear();
-        Image tileImage = new Image("file:D:/Programming/Repos/Bobzanjani/src/main/resources/images/grasss.png");
+        Image tileImage = new Image(getClass().getResourceAsStream("/images/grasss.png"));
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
