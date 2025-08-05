@@ -1,5 +1,7 @@
 package game;
 
+//jjjj
+
 public class Building {
     BuildingType buildingType;
     private int customCost; // This could be modified during gameplay
