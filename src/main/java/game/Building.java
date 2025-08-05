@@ -1,5 +1,7 @@
 package game;
 
+//jjjj
+
 public class Building {
     private String name; // Name of the building (e.g., House, Road)
     private int cost; // Cost of building
