@@ -1,6 +1,6 @@
 package game;
 
-//jjjj
+//jjjjo
 
 public class Building {
     BuildingType buildingType;
