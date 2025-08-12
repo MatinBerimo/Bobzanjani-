@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Name of the main branch
+MAIN_BRANCH="main"
+
+# Fetch remote changes
+git fetch origin $MAIN_BRANCH
+
+# Check if local is behind remote
+LOCAL=$(git rev-parse $MAIN_BRANCH)
+REMOTE=$(git rev-parse origin/$MAIN_BRANCH)
+
+if [ "$LOCAL" != "$REMOTE" ]; then
+  echo "🚨 The $MAIN_BRANCH branch is not up to date! Please do this before committing:"
+  echo "git checkout $MAIN_BRANCH && git pull origin $MAIN_BRANCH"
+  echo "Then switch back to your branch and continue."
+  exit 1
+fi
+
