@@ -131,6 +131,7 @@ public class Map {
                         ((ImageView) node).setImage(buildingImage);
                     }
                 }
+                tile.getBuilding().startResourceCycle(gridPane, x, y, resources);
             } else {
                 System.out.println("Not enough resources to build this building.");
             }
@@ -142,8 +143,8 @@ public class Map {
     public void removeBuilding(GridPane gridPane, int x, int y) {
         Tile tile = tiles[x][y];
         if (tile.getBuilding() != null) {
-            // Add resources back or whatever is appropriate for demolishing
-            // For now, just remove the building and revert image to grass
+            // Remove timer overlay and building image
+            tile.getBuilding().stopResourceCycle(gridPane);
             tile.placeBuilding(null); // Remove the building
             Image grassImage = new Image(getClass().getResourceAsStream("/images/grass.png"));
             for (Node node : gridPane.getChildren()) {
