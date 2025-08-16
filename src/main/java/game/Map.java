@@ -41,7 +41,7 @@ public class Map {
 
     public void displayMap(GridPane gridPane) {
         gridPane.getChildren().clear();
-        Image tileImage = new Image(getClass().getResourceAsStream("/images/grasss.png"));
+        Image tileImage = new Image(getClass().getResourceAsStream("/images/grass.png"));
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -141,7 +141,7 @@ public class Map {
             // Add resources back or whatever is appropriate for demolishing
             // For now, just remove the building and revert image to grass
             tile.placeBuilding(null); // Remove the building
-            Image grassImage = new Image(getClass().getResourceAsStream("/images/grasss.png"));
+            Image grassImage = new Image(getClass().getResourceAsStream("/images/grass.png"));
             for (Node node : gridPane.getChildren()) {
                 if (GridPane.getRowIndex(node) == y && GridPane.getColumnIndex(node) == x) {
                     ((ImageView) node).setImage(grassImage);
