@@ -1,7 +1,7 @@
 package game;
 
 public enum BuildingType {
-    HOUSE(100, 50, 0, 50, 10),  // Cost, Materials, Energy, Energy Generated per minute, Population Generated per minute
+    HOUSE(100, 50, 0, 50, 10),  // buildCost, materialsCost, energyConsumption, dailyIncome, populationIncrease
     FACTORY(350, 0, 0, 0, 0),
     PARK(200, 50, 0, 0, 0),
     ROAD(50, 20, 0, 0, 0);
