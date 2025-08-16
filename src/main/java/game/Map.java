@@ -39,6 +39,10 @@ public class Map {
         return tiles[x][y];
     }
 
+    public void setSelectedBuildingType(BuildingType selectedBuildingType) {
+        this.selectedBuildingType = selectedBuildingType;
+    }
+
     public void displayMap(GridPane gridPane) {
         gridPane.getChildren().clear();
         Image tileImage = new Image(getClass().getResourceAsStream("/images/grass.png"));

@@ -20,8 +20,6 @@ import javafx.scene.layout.BorderPane;
 
 public class Main extends Application {
 
-    private BuildingType selectedBuildingType; // Store the currently selected building type
-
     @Override
     public void start(Stage primaryStage) {
         // Initialize resources (money, materials, energy, and population)
@@ -55,20 +53,20 @@ public class Main extends Application {
         // Building selection buttons (add them here)
         // Example:
         javafx.scene.control.Button houseButton = new javafx.scene.control.Button("House");
-        houseButton.setOnAction(e -> selectedBuildingType = BuildingType.HOUSE);
+        houseButton.setOnAction(e -> map.setSelectedBuildingType(BuildingType.HOUSE));
         buildingSelectionBar.getChildren().add(houseButton);
 
         javafx.scene.control.Button roadButton = new javafx.scene.control.Button("Road");
-        roadButton.setOnAction(e -> selectedBuildingType = BuildingType.ROAD);
+        roadButton.setOnAction(e -> map.setSelectedBuildingType(BuildingType.ROAD));
         buildingSelectionBar.getChildren().add(roadButton);
 
         javafx.scene.control.Button parkButton = new javafx.scene.control.Button("Park");
-        parkButton.setOnAction(e -> selectedBuildingType = BuildingType.PARK);
+        parkButton.setOnAction(e -> map.setSelectedBuildingType(BuildingType.PARK));
         buildingSelectionBar.getChildren().add(parkButton);
 
         // Factory button (from previous request)
         javafx.scene.control.Button factoryButton = new javafx.scene.control.Button("Factory");
-        factoryButton.setOnAction(e -> selectedBuildingType = BuildingType.FACTORY);
+        factoryButton.setOnAction(e -> map.setSelectedBuildingType(BuildingType.FACTORY));
         buildingSelectionBar.getChildren().add(factoryButton);
 
         // Main layout using BorderPane
