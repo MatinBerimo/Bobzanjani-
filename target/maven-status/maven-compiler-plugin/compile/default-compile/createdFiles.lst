@@ -1,6 +1,7 @@
 game\BuildingType.class
 game\Tile.class
 game\ResourceManager.class
+game\AlertHandler.class
 game\ResourceType.class
 game\Map.class
 game\Building.class

@@ -135,7 +135,10 @@ public class Map {
                 }
                 tile.getBuilding().startResourceCycle(gridPane, x, y, resources);
             } else {
-                showAlert("Not enough resources to build this building.");
+                String message = String.format(
+                    "Not enough resources to build this building.%nRequired: %d money, %d materials, %d energy.",
+                    type.getBuildCost(), type.getMaterialsCost(), type.getEnergyCost());
+                showAlert(message);
             }
         } else {
             System.out.println("Cannot build here! Tile is not buildable or already has a building.");
