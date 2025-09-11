@@ -3,9 +3,9 @@ package game;
 public enum BuildingType {
     // buildCost, materialsCost, energyCost, moneyYield, materialsYield,
     // energyYield, populationYield, cycleTime (sec)
-    HOUSE(400, 50, 5, 15, 0, -5, 20, 60),
+    HOUSE(400, 50, 0, 15, 0, -2, 20, 60),
     FACTORY(1200, 200, 40, 300, 150, -30, 0, 120),
-    POWER_PLANT(1000, 150, 0, -40, 0, 50, 0, 120),
+    POWER_PLANT(800, 120, 0, -40, 0, 75, 0, 120),
     PARK(300, 30, 2, -5, 0, -1, 5, 90),
     ROAD(100, 10, 0, -2, 0, 0, 0, 60);
 

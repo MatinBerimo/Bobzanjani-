@@ -23,7 +23,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         // Initialize resources (money, materials, energy, and population)
-        ResourceManager resources = new ResourceManager(500, 100, 50, 10); // Initial resources
+        ResourceManager resources = new ResourceManager(1200, 200, 50, 10); // Initial resources
 
         // Create a new map of 100x100 tiles and pass the resources object
         Map map = new Map(100, 100, resources); // Pass the resources object
