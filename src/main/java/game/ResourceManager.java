@@ -27,7 +27,7 @@ public class ResourceManager {
     public boolean canAfford(int buildCost, int materialsCost, int energyConsumption) {
         return get(ResourceType.MONEY) >= buildCost &&
                get(ResourceType.MATERIALS) >= materialsCost &&
-               get(ResourceType.ENERGY) >= energyConsumption;
+               (energyConsumption <= 0 || get(ResourceType.ENERGY) >= energyConsumption);
     }
 
     public void spendResources(int buildCost, int materialsCost, int energyConsumption) {
