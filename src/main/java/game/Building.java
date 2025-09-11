@@ -35,14 +35,10 @@ public class Building {
      * grants resources when the timer completes.
      */
     public void startResourceCycle(GridPane gridPane, int x, int y, ResourceManager resources) {
-        double seconds;
-        switch (buildingType) {
-            case HOUSE -> seconds = 60;
-            case FACTORY -> seconds = 120;
-            default -> {
-                return; // no timer for other buildings
-            }
-        }
+        int seconds = buildingType.getCycleTime();
+        if (seconds <= 0) {
+            return; // no timer for buildings without a cycle
+        } 
 
         progressIndicator = new ProgressIndicator(0);
         progressIndicator.setOpacity(0.5); // transparent overlay
@@ -54,18 +50,10 @@ public class Building {
             new KeyFrame(Duration.ZERO,
                 new KeyValue(progressIndicator.progressProperty(), 0)),
             new KeyFrame(Duration.seconds(seconds), e -> {
-                switch (buildingType) {
-                    case HOUSE -> {
-                        resources.add(ResourceType.POPULATION, 10);
-                        resources.add(ResourceType.ENERGY, 50);
-                    }
-                    case FACTORY -> {
-                        resources.add(ResourceType.MONEY, 200);
-                        resources.add(ResourceType.MATERIALS, 100);
-                        resources.add(ResourceType.ENERGY, -20);
-                        resources.add(ResourceType.POPULATION, -5);
-                    }
-                }
+                resources.add(ResourceType.MONEY, buildingType.getMoneyYield());
+                resources.add(ResourceType.MATERIALS, buildingType.getMaterialsYield());
+                resources.add(ResourceType.ENERGY, buildingType.getEnergyYield());
+                resources.add(ResourceType.POPULATION, buildingType.getPopulationYield());
                 if (resources.get(ResourceType.ENERGY) > 200) {
                     resources.set(ResourceType.ENERGY, 200);
                 }

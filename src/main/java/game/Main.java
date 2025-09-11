@@ -69,6 +69,9 @@ public class Main extends Application {
         factoryButton.setOnAction(e -> map.setSelectedBuildingType(BuildingType.FACTORY));
         buildingSelectionBar.getChildren().add(factoryButton);
 
+        javafx.scene.control.Button powerPlantButton = new javafx.scene.control.Button("Power Plant");
+        powerPlantButton.setOnAction(e -> map.setSelectedBuildingType(BuildingType.POWER_PLANT));
+        buildingSelectionBar.getChildren().add(powerPlantButton);
         // Main layout using BorderPane
         BorderPane root = new BorderPane();
         root.setTop(resourceBar);
