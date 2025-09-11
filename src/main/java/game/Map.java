@@ -10,6 +10,8 @@ import java.util.EnumMap;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
+// Utility for showing alerts when actions cannot be completed
+import static game.AlertHandler.showAlert;
 
 public class Map {
     private Tile[][] tiles;
@@ -133,7 +135,7 @@ public class Map {
                 }
                 tile.getBuilding().startResourceCycle(gridPane, x, y, resources);
             } else {
-                System.out.println("Not enough resources to build this building.");
+                showAlert("Not enough resources to build this building.");
             }
         } else {
             System.out.println("Cannot build here! Tile is not buildable or already has a building.");
