@@ -39,4 +39,14 @@ public class ResourceManagerTest {
         assertTrue(manager.get(ResourceType.MATERIALS) >= 0);
         assertTrue(manager.get(ResourceType.ENERGY) >= 0);
     }
+
+    @Test
+    void testResourceAlert() {
+        ResourceManager manager = new ResourceManager(100, 50, 75, 0);
+        assertFalse(manager.needsAlert(ResourceType.MONEY, 50));
+        assertEquals("", manager.getAlert(ResourceType.MONEY, 50));
+
+        assertTrue(manager.needsAlert(ResourceType.MONEY, 150));
+        assertEquals("MONEY is below the threshold of 150", manager.getAlert(ResourceType.MONEY, 150));
+    }
 }
